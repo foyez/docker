@@ -28,6 +28,10 @@ What happens when one application dies? Container orchestration system notices i
 
 source: from internet
 
+## Docker Image vs Container
+
+A Docker image packs up the application and environment required by the application to run, and a container is a running instance of the image. Images are the packing part of Docker, analogous to "source code" or a "program". Containers are the execution part of Docker, analogous to a "process". <sup>[ref](https://stackoverflow.com/questions/23735149/what-is-the-difference-between-a-docker-image-and-a-containe)</sup>
+
 ## Basic commands
 
 ```sh

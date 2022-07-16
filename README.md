@@ -26,6 +26,8 @@ What happens when one application dies? Container orchestration system notices i
 
 ![image](https://user-images.githubusercontent.com/11992095/125337394-c40d9980-e370-11eb-8bca-29546750357e.png)
 
+source: from internet
+
 ## Basic commands
 
 ```sh

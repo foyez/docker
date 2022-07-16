@@ -36,7 +36,15 @@ source: from internet
 > docker -v # show docker version
 
 > docker version # show docker version info
+
+> docker run -d -p6000:6379 redis # docker run -d -p<HOST_PORT:CONTAINER_PORT> <IMAGE | CONTAINER ID | NAME>
 ```
+
+## Container Information
+
+| CONTAINER ID | IMAGE | COMMAND                | CREATED       | STATUS       | PORTS                  | NAMES         |
+| ------------ | ----- | ---------------------- | ------------- | ------------ | ---------------------- | ------------- |
+| d58a6b05e3b9 | redis | "docker-entrypoint.s…" | 3 minutes ago | Up 3 minutes | 0.0.0.0:6000->6379/tcp | boring_agnesi |
 
 ## Container commands
 

@@ -37,7 +37,7 @@ source: from internet
 
 > docker version # show docker version info
 
-> docker run -d -p6000:6379 redis # docker run -d -p<HOST_PORT:CONTAINER_PORT> <IMAGE | CONTAINER ID | NAME>
+> docker run -d -p6000:6379 --name boring_agnesi redis # docker run -d -p<HOST_PORT:CONTAINER_PORT> --name <CONTAINER_NAME> <IMAGE | CONTAINER ID | NAME>
 ```
 
 ## Container Information

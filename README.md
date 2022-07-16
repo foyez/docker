@@ -42,22 +42,24 @@ source: from internet
 
 Here `<container>` equals __container name__ or __container id__
 
-| command                                             | explain                                 | shorthand/notes |
-| --------------------------------------------------- | --------------------------------------- | --------------- |
-| `docker container run <image>`                      | Runs a container from an image          | `docker run`    |
-| `docker container run -d <image>`                   | Runs a container in detached mode.      | `docker run -d` |
-| `docker container ls -a`                            | Lists all containers                    | `docker ps -a`  |
-| docker container ls -a &#124; grep <container_name> | Filters container by name               |                 |
-| `docker container rm <container>`                   | Removes a container                     | `docker rm      |
-| `docker container stop <container>`                 | Stops a container                       | `docker stop`   |
-| `docker stop $(docker ps -aq)`                      | Stops all running containers            |                 |
-| `docker container exec <container>`                 | Executes a command inside the container | `docker exec`   |
-| `docker container rm <container>`                   | removes a stop container                |                 |
-| `docker container rm -f <container>`                | removes a running container forcefully  |                 |
-| `docker container rm <container> <container>`       | removes multiple containers             |                 |
-| `docker rm $(docker ps -aq)`                        | removes all containers                  |                 |
-| `docker logs <container>`                           | gets logs                               |                 |
-| `docker container top <container>`                  | list processes running in container     |                 |
+| command                                                     | explain                                   | shorthand/notes          |
+| ----------------------------------------------------------- | ----------------------------------------- | ------------------------ |
+| `docker container run <image>`                              | Runs a container from an image            | `docker run`             |
+| `docker container run -d <image>`                           | Runs a container in detached mode.        | `docker run -d`          |
+| `docker container run -p<HOST_PORT:CONTAINER_PORT> <image>` | Runs a container (binding port with host) | `docker run -p4000:3000` |
+| `docker container ls -a`                                    | Lists all containers                      | `docker ps -a`           |
+| docker container ls -a &#124; grep <container_name>         | Filters container by name                 |                          |
+| `docker container rm <container>`                           | Removes a container                       | `docker rm               |
+| `docker container stop <container>`                         | Stops a container                         | `docker stop`            |
+| `docker stop $(docker ps -aq)`                              | Stops all running containers              |                          |
+| `docker container exec <container>`                         | Executes a command inside the container   | `docker exec`            |
+| `docker container rm <container>`                           | removes a stop container                  |                          |
+| `docker container rm -f <container>`                        | removes a running container forcefully    |                          |
+| `docker container rm <container> <container>`               | removes multiple containers               |                          |
+| `docker rm $(docker ps -aq)`                                | removes all containers                    |                          |
+| `docker logs <container>`                                   | gets logs                                 |                          |
+| `docker container top <container>`                          | list processes running in container       |                          |
+
 
 > In fish, **$** is used only for variables. Correct notation equivalent to bash **$(command)** is just **(command)** in fish.
 

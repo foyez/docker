@@ -43,6 +43,7 @@ Here `<container>` equals __container name__ or __container id__
 | command                                             | explain                                 | shorthand/notes |
 | --------------------------------------------------- | --------------------------------------- | --------------- |
 | `docker container run <image>`                      | Runs a container from an image          | `docker run`    |
+| `docker container run -d <image>`                   | Runs a container in detached mode.      | `docker run -d` |
 | `docker container ls -a`                            | Lists all containers                    | `docker ps -a`  |
 | docker container ls -a &#124; grep <container_name> | Filters container by name               |                 |
 | `docker container rm <container>`                   | Removes a container                     | `docker rm      |

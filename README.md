@@ -1,8 +1,14 @@
-# Docker
+## Bare Metal
 
-- Docker is a set of tools to deliver software in containers.
-- Containers are packages of software.
-- Containers are isolated so that they don’t interfere with each other or the software running outside of the containers.
+> Bare metal is a computer system without a base operating system (OS) or installed applications. It is a computer's hardware assembly, structure and components that is installed with either the firmware or basic input/output system (BIOS) software utility or no software at all. <sup>[ref](https://www.techopedia.com/definition/2153/bare-metal)</sup>
+
+## Virtual Machines
+
+> A virtual machine (VM) is a virtual environment that functions as a virtual computer system with its own CPU, memory, network interface, and storage, created on a physical hardware system (located off- or on-premises). Software called a hypervisor separates the machine’s resources from the hardware and provisions them appropriately so they can be used by the VM. VM allows to have multiple guest instances of OS (e.g. Linux, Windows, etc) running inside of a host instance of OS. <sup>[ref](https://www.redhat.com/en/topics/virtualization/what-is-a-virtual-machine)</sup>
+
+## Container
+
+> Container using a few features of Linux together to achieve isolation.
 
 ## Benefits from containers
 
@@ -21,6 +27,12 @@ You will setup a web app which uses these services when running: a postgres data
 #### Scenario 4: Scaling
 
 What happens when one application dies? Container orchestration system notices it, splits traffic between the working replicas and spin up a new container to replace the dead one.
+
+# Docker
+
+- Docker is a set of tools to deliver software in containers.
+- Containers are packages of software.
+- Containers are isolated so that they don’t interfere with each other or the software running outside of the containers.
 
 ## Virtual Machine vs Docker
 

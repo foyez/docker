@@ -87,6 +87,7 @@ Here `<container>` equals __container name__ or __container id__
 | `docker rm $(docker ps -aq)`                      | removes all containers                    |                                         |
 | `docker logs <container>`                         | gets logs                                 |                                         |
 | `docker top <container>`                          | list processes running in container       |                                         |
+| `docker container inspect <container>`                          |  Display detailed information on one or more containers       |    `docker container inspect postgres15`                                     |
 
 
 > In fish, **$** is used only for variables. Correct notation equivalent to bash **$(command)** is just **(command)** in fish.

@@ -64,14 +64,14 @@ A Docker image packs up the application and environment required by the applicat
 
 ## Docker Image
 
-- Build an Image from Dockerfile
+- **Build an Image from Dockerfile**
 
 ```sh
 # docker build -t image_name path_of_dockerfile
 docker build -t myapp .
 ```
 
-- List all local images
+- **List all local images**
 
 ```sh
 docker image ls
@@ -80,7 +80,7 @@ docker image ls
 docker images
 ```
 
-- Pull an image from docker repository
+- **Pull an image from docker repository**
 
 ```sh
 # docker pull registry_omain/image_name:tag
@@ -91,7 +91,7 @@ docker pull private-registry-domain/myapp:1.0
 docker pull node:lts
 ```
 
-- Push image to docker registry
+- **Push image to docker registry**
 
 ```sh
 # docker push registry_omain/image_name:tag
@@ -102,7 +102,7 @@ docker push private-registry-domain/myapp:1.0
 docker pull myapp:lts
 ```
 
-- Remove a local image
+- **Remove a local image**
 
 ```sh
 docker image rm myapp:1.0 # docker image rm image_name/image_id
@@ -111,28 +111,28 @@ docker image rm myapp:1.0 # docker image rm image_name/image_id
 docker rmi myapp:1.0
 ```
 
-- Rename image name
+- **Rename image name**
 
 ```sh
 # docker tag old_image_name new_image_name
 docker tag myapp:1.0 myapp:latest
 ```
 
-- Save an image to a tar archive
+- **Save an image to a tar archive**
 
 ```sh
 # docker save -o name.tar image_name:tag
 docker save -o myapp.tar mypp.1.0
 ```
 
-- Load an image from a tar archive
+- **Load an image from a tar archive**
 
 ```sh
 # docker load -i name.tar
 docker load -i myapp.tar
 ```
 
-- Remove unused images
+- **Remove unused images**
 
 ```sh
 docker image prune
@@ -146,7 +146,7 @@ Container Information
 | ------------ | ----- | ---------------------- | ------------- | ------------ | ---------------------- | ------------- |
 | d58a6b05e3b9 | redis | "docker-entrypoint.s…" | 3 minutes ago | Up 3 minutes | 0.0.0.0:6000->6379/tcp | boring_agnesi |
 
-- Run a container from an image
+- **Run a container from an image**
 
 ```sh
 # run a container in attached mode with a random name
@@ -169,7 +169,7 @@ docker run -d \
 myapp:1.0
 ```
 
-- List containers
+- **List containers**
 
 ```sh
 # list all running containers
@@ -179,21 +179,21 @@ docker container ls # OR, docker ps
 docker container ls -a # OR, docker ps -a
 ```
 
-- Stop a running container
+- **Stop a running container**
 
 ```sh
 # docker stop container_name/container_id
 docker stop myapp
 ```
 
-- Start a stopped container
+- **Start a stopped container**
 
 ```sh
 # docker start container_name/container_id
 docker start myapp
 ```
 
-- Execute command in running container
+- **Execute command in running container**
 
 > It is useful for debugging, troubleshooting, or when we need to run commands directly inside the container. Once the container is running in interactive mode, we can execute commands within the container just as if we were inside a regular terminal.
 
@@ -203,7 +203,7 @@ docker start myapp
 docker exec -it myapp sh # OR, docker exec -it myapp /bin/sh
 ```
 
-- Run a container in interactive mode
+- **Run a container in interactive mode**
 
 > It is useful for debugging, troubleshooting, or when we need to run commands directly inside the container. Once the container is running in interactive mode, we can execute commands within the container just as if we were inside a regular terminal. 
 
@@ -216,10 +216,10 @@ docker run -it myapp
 dcoker run -it myapp bash
 ```
 
-> type `exit` or `Ctrl + D`: To exit the interactive mode and stoping the container.
-> `Ctrl + P` followed by `Ctrl + Q`: To exit the interactive mode without stopping the container.
+type `exit` or `Ctrl + D`: To exit the interactive mode and stoping the container. \
+`Ctrl + P` followed by `Ctrl + Q`: To exit the interactive mode without stopping the container.
 
-- Remove a container
+- **Remove a container**
 
 ```sh
 # remove a stopped container
@@ -230,7 +230,7 @@ docker container rm myapp # OR, docker rm myapp
 docker container rm -f myapp # docker rm -f myapp
 ```
 
-- View container logs
+- **View container logs**
 
 > It is useful for debugging, and troubleshooting.
 
@@ -238,7 +238,7 @@ docker container rm -f myapp # docker rm -f myapp
 docker logs myapp
 ```
 
-- Pause/unpause a running container
+- **Pause/unpause a running container**
 
 ```sh
 docker pause myapp
@@ -276,25 +276,25 @@ Here `<container>` equals __container name__ or __container id__
 
 > Docker volumes mean that a pysical file system path is mounted into the virtual file system path in Docker. This allows for synchronization between the virtual file system and the host file system. When virtual file system is updated, the host file system gets automatically replicated, or vice varsa.
 
-- Create a named volume
+- **Create a named volume**
 
 ```sh
 docker volume create volume_name
 ```
 
-- List all volumes
+- **List all volumes**
 
 ```sh
 docker volume ls
 ```
 
-- Remove a volume
+- **Remove a volume**
 
 ```sh
 docker volume rm volume_name
 ```
 
-- Run a container with a volume
+- **Run a container with a volume**
 
 ```sh
 # This is called host vaolumes
@@ -313,7 +313,7 @@ docker run -v /var/lib/mysql/data myapp
 docker run -v my-data:/var/lib/mysql/data myapp
 ```
 
-- Copy files between a contain and a volume
+- **Copy files between a contain and a volume**
 
 ```sh
 # copy from container to volume
@@ -325,37 +325,37 @@ docker cp /path/in/volume container_name:/path/in/container
 
 ## Docker Network
 
-- Create a user-defined bridge network
+- **Create a user-defined bridge network**
 
 ```sh
 docker network create network_name
 ```
 
-- List all networks
+- **List all networks**
 
 ```sh
 docker network ls
 ```
 
-- Connect a container to a network
+- **Connect a container to a network**
 
 ```sh
 docker network connect network_name container_name
 ```
 
-- Disconnect a container from a network
+- **Disconnect a container from a network**
 
 ```sh
 docker network disconnect network_name container_name
 ```
 
-- Run a container within a specific network
+- **Run a container within a specific network**
 
 ```sh
 docker run --network network_name image_name
 ```
 
-- Inspect details of an image, container, volume, and network
+- **Inspect details of an image, container, volume, and network**
 
 ```sh
 docker image inspect myapp:1.0 # docker image inspect image_name:tag

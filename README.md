@@ -216,8 +216,8 @@ docker run -it myapp
 dcoker run -it myapp bash
 ```
 
-type `exit` or `Ctrl + D`: To exit the interactive mode and stoping the container.
-`Ctrl + P` followed by `Ctrl + Q`: To exit the interactive mode without stopping the container.
+> type `exit` or `Ctrl + D`: To exit the interactive mode and stoping the container.
+> `Ctrl + P` followed by `Ctrl + Q`: To exit the interactive mode without stopping the container.
 
 - Remove a container
 
@@ -369,3 +369,5 @@ docker image inspect myapp | jq
 # we can also use "docker inspect" for all of them
 docker inspect myapp
 ```
+
+## Docker Compose

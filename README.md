@@ -352,7 +352,7 @@ docker network disconnect network_name container_name
 - **Run a container within a specific network**
 
 ```sh
-docker run --network network_name image_name
+docker run --network network_name image_name # OR, docker run -net network_name image_name
 ```
 
 - **Inspect details of an image, container, volume, and network**

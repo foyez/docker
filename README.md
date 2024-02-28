@@ -55,7 +55,14 @@ A Docker image packs up the application and environment required by the applicat
 
 > docker version # show docker version info
 
-> docker run -d -p 6000:6379 --name boring_agnesi redis # docker run -d -p <HOST_PORT:CONTAINER_PORT> --name <CONTAINER_NAME> <IMAGE | CONTAINER ID | NAME>
+# run a docker container with all the possible combinations
+> docker run -d \
+-p 6000:6379 \
+-p 8080:8080 \
+-v my-data:/data \
+-net my-network \
+--name redis \
+redis
 
 > docker exec -it d58a6b05e3b9 /bin/bash # executes command inside container
 # or, docker exec -it d58a6b05e3b9 bash

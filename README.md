@@ -2,83 +2,295 @@
 
 ## Bare Metal
 
-> Bare metal is a computer system without a base operating system (OS) or installed applications. It is a computer's hardware assembly, structure and components that is installed with either the firmware or basic input/output system (BIOS) software utility or no software at all. <sup>[ref](https://www.techopedia.com/definition/2153/bare-metal)</sup>
+**Bare metal** refers to a physical computer system with no pre-installed operating system or applications. Only firmware such as BIOS or UEFI may be present.
 
-## Virtual Machines
+**Key points:**
 
-> A virtual machine (VM) is a virtual environment that functions as a virtual computer system with its own CPU, memory, network interface, and storage, created on a physical hardware system (located off- or on-premises). Software called a hypervisor separates the machine’s resources from the hardware and provisions them appropriately so they can be used by the VM. VM allows to have multiple guest instances of OS (e.g. Linux, Windows, etc) running inside of a host instance of OS. <sup>[ref](https://www.redhat.com/en/topics/virtualization/what-is-a-virtual-machine)</sup>
+* No virtualization layer
+* Full access to hardware resources
+* High performance, low abstraction
 
-## Container
+---
 
-> Container using a few features of Linux together to achieve isolation.
+## Virtual Machines (VMs)
 
-## Benefits from containers
+A **virtual machine (VM)** is a fully virtualized computer running its own operating system on top of a **hypervisor**.
 
-#### Scenario 1: Works on my machine
+**Characteristics:**
 
-You create a software. It works on your computer. It may even go through a testing pipeline working perfectly. You send it to the server and it does not work. This known as the “__works on my machine__” problem.\
-\
-Containers solve this problem by allowing the developer to personally run the application inside a container, which then includes all of the dependencies required for the app to work.
+* Each VM includes a full guest OS
+* Strong isolation
+* Higher resource overhead
+* Slower startup compared to containers
 
-#### Scenario 2: Isolated environments
+**Example:**
 
-### Scenario 3: Development
+* One physical server running Linux
+* Multiple VMs running Linux and Windows
 
-You will setup a web app which uses these services when running: a postgres database, mongodb, redis and a number of others. Simple enough, you install whatever is required to run the application and all of the applications that it depends on.
+---
 
-#### Scenario 4: Scaling
+## Containers
 
-What happens when one application dies? Container orchestration system notices it, splits traffic between the working replicas and spin up a new container to replace the dead one.
+A **container** is a lightweight, isolated environment that packages an application with all its dependencies. Containers share the host OS kernel instead of running a full OS.
 
-# Docker
+**Key technologies used:**
 
-- Docker is a set of tools to deliver software in containers.
-- Containers are packages of software.
-- Containers are isolated so that they don’t interfere with each other or the software running outside of the containers.
+* Linux namespaces (process, network, filesystem isolation)
+* cgroups (resource limits)
 
-## Virtual Machine vs Docker
+**Why containers are fast:**
 
-![image](https://user-images.githubusercontent.com/11992095/125337394-c40d9980-e370-11eb-8bca-29546750357e.png)
+* No guest OS
+* Minimal overhead
 
-source: from internet
+---
 
-## Docker Image vs Container
+## Virtual Machines vs Containers
 
-A Docker image packs up the application and environment required by the application to run, and a container is a running instance of the image. Images are the packing part of Docker, analogous to "source code" or a "program". Containers are the execution part of Docker, analogous to a "process". <sup>[ref](https://stackoverflow.com/questions/23735149/what-is-the-difference-between-a-docker-image-and-a-containe)</sup>
+![Virtual Machines vs Contaienrs](image.png)
 
-## Basic commands
+source: [k21academy](https://k21academy.com/wp-content/uploads/2020/11/Docker-and-Vm-blog-image_result-1.webp)
 
-```sh
-> docker # show docker commands & management commands
+<details>
 
-> docker -v # show docker version
+<summary><strong>Details >></strong></summary>
 
-> docker version # show docker version info
+### High-Level Difference
 
-# run a docker container with all the possible combinations
-> docker run -d \
--p 6000:6379 \
--p 8080:8080 \
--v my-data:/data \
--net my-network \
---name redis \
-redis
+| Virtual Machines           | Containers                   |
+| -------------------------- | ---------------------------- |
+| Virtualize **hardware**    | Virtualize **applications**  |
+| Each VM has its **own OS** | Share the **host OS kernel** |
+| Heavyweight                | Lightweight                  |
+| Slower to start            | Start in seconds             |
+| Strong isolation           | Process-level isolation      |
 
-> docker exec -it d58a6b05e3b9 /bin/bash # executes command inside container
-# or, docker exec -it d58a6b05e3b9 bash
-# or, docker exec -it d58a6b05e3b9 sh
+---
+
+### Architecture Comparison
+
+#### Virtual Machines
+
+```
+Applications
+Guest OS
+-----------
+Hypervisor
+-----------
+Host OS
+-----------
+Hardware
 ```
 
-## Docker Image
+* Each VM runs a **full operating system**
+* Hypervisor manages hardware allocation
+* Higher memory and CPU usage
 
-- **Build an Image from Dockerfile**
+---
+
+#### Containers
+
+```
+Applications
+-----------
+Container Runtime (Docker)
+-----------
+Host OS Kernel
+-----------
+Hardware
+```
+
+* Containers **do not include an OS**
+* Share the host kernel
+* Much lower overhead
+
+---
+
+### Resource Usage
+
+| Feature      | Virtual Machine | Container |
+| ------------ | --------------- | --------- |
+| Disk size    | GBs             | MBs       |
+| Memory usage | High            | Low       |
+| CPU overhead | High            | Minimal   |
+| Boot time    | Minutes         | Seconds   |
+
+---
+
+### Isolation & Security
+
+| Aspect            | Virtual Machine   | Container                |
+| ----------------- | ----------------- | ------------------------ |
+| Isolation         | Strong (OS-level) | Moderate (process-level) |
+| Kernel            | Separate per VM   | Shared                   |
+| Security boundary | Hardware-level    | OS-level                 |
+
+> VMs are better for **strong isolation**, containers are better for **speed and density**.
+
+---
+
+### Portability
+
+|                             | Virtual Machine | Container |
+| --------------------------- | --------------- | --------- |
+| Cross-platform              | Limited         | Excellent |
+| Environment consistency     | Medium          | Very high |
+| “Works on my machine” issue | Possible        | Rare      |
+
+Containers package the app and dependencies together, making them highly portable.
+
+---
+
+### Scaling & Deployment
+
+#### Virtual Machines
+
+* Scaling means **creating new VMs**
+* Slow provisioning
+* Less efficient for microservices
+
+#### Containers
+
+* Scale by **spawning new containers**
+* Very fast
+* Ideal for microservices & cloud-native apps
+
+---
+
+### Use Cases
+
+#### Use Virtual Machines When:
+
+* You need **different operating systems**
+* Strong security isolation is required
+* Running legacy applications
+* Compliance requires OS-level isolation
+
+#### Use Containers When:
+
+* Building **microservices**
+* CI/CD pipelines
+* Cloud-native applications
+* Fast startup and scaling are important
+
+---
+
+### Real-World Example
+
+#### VM Example
+
+Running:
+
+* Windows Server VM
+* Ubuntu VM
+* CentOS VM
+  All on the same physical machine
+
+#### Container Example
+
+Running:
+
+* Node.js API
+* Redis
+* PostgreSQL
+  All sharing the same Linux kernel
+
+</details>
+
+
+## Why Containers Are Useful
+
+### Scenario 1: “Works on My Machine”
+
+Containers package the application **with its exact dependencies**, ensuring consistent behavior across development, testing, and production environments.
+
+---
+
+### Scenario 2: Isolated Environments
+
+Each container runs independently:
+
+* No dependency conflicts
+* Safe experimentation
+* Easy cleanup
+
+---
+
+### Scenario 3: Development with Multiple Services
+
+Example application dependencies:
+
+* PostgreSQL
+* MongoDB
+* Redis
+
+Containers allow each service to run independently without polluting the host system.
+
+---
+
+### Scenario 4: Scaling & Reliability
+
+With container orchestration (e.g., Kubernetes):
+
+* Failed containers are restarted automatically
+* Traffic is load-balanced across replicas
+* Horizontal scaling becomes simple
+
+---
+
+## What Is Docker?
+
+**Docker** is a set of tools that enables developers to:
+
+* Build container images
+* Run containers
+* Share images via registries
+
+**In short:**
+
+> Docker helps you package, ship, and run applications consistently.
+
+---
+
+## Docker Image vs Docker Container
+
+| Docker Image   | Docker Container  |
+| -------------- | ----------------- |
+| Blueprint      | Running instance  |
+| Immutable      | Mutable (runtime) |
+| Like a program | Like a process    |
+
+**Example:**
+
+```sh
+docker run nginx
+```
+
+* `nginx` → image
+* Running nginx instance → container
+
+---
+
+## Basic Docker Commands
+
+```sh
+docker --version
+docker version
+```
+
+---
+
+## Docker Images
+
+### Build an Image
 
 ```sh
 # docker build -t image_name path_of_dockerfile
 docker build -t myapp .
 ```
 
-- **List all local images**
+### List Images
 
 ```sh
 docker image ls
@@ -87,7 +299,7 @@ docker image ls
 docker images
 ```
 
-- **Pull an image from docker repository**
+### Pull an image from docker repository
 
 ```sh
 # docker pull registry_omain/image_name:tag
@@ -98,7 +310,7 @@ docker pull private-registry-domain/myapp:1.0
 docker pull node:lts
 ```
 
-- **Push image to docker registry**
+### Push Image
 
 ```sh
 # docker push registry_omain/image_name:tag
@@ -109,7 +321,7 @@ docker push private-registry-domain/myapp:1.0
 docker pull myapp:lts
 ```
 
-- **Remove a local image**
+### Remove Image
 
 ```sh
 docker image rm myapp:1.0 # docker image rm image_name/image_id
@@ -118,34 +330,29 @@ docker image rm myapp:1.0 # docker image rm image_name/image_id
 docker rmi myapp:1.0
 ```
 
-- **Rename image name**
+### Rename image name
 
 ```sh
 # docker tag old_image_name new_image_name
 docker tag myapp:1.0 myapp:latest
 ```
 
-- **Save an image to a tar archive**
-
-```sh
-# docker save -o name.tar image_name:tag
-docker save -o myapp.tar mypp.1.0
-```
-
-- **Load an image from a tar archive**
+### Load an image from a tar archive
 
 ```sh
 # docker load -i name.tar
 docker load -i myapp.tar
 ```
 
-- **Remove unused images**
+### Remove unused images
 
 ```sh
 docker image prune
 ```
 
-## Docker Container
+---
+
+## Docker Containers
 
 Container Information
 
@@ -153,7 +360,7 @@ Container Information
 | ------------ | ----- | ---------------------- | ------------- | ------------ | ---------------------- | ------------- |
 | d58a6b05e3b9 | redis | "docker-entrypoint.s…" | 3 minutes ago | Up 3 minutes | 0.0.0.0:6000->6379/tcp | boring_agnesi |
 
-- **Run a container from an image**
+### Run a Container
 
 ```sh
 # run a container in attached mode with a random name
@@ -170,13 +377,10 @@ docker run --name myapp myapp:1.0
 # docker run -p host_port:container_port image_name:tag
 docker run -p 8080:8081 myapp:1.0
 
-docker run -d \
--p 8080:8081 \
---name myapp \
-myapp:1.0
+docker run -d -p 8080:8081 --name myapp myapp:1.0
 ```
 
-- **List containers**
+### List Containers
 
 ```sh
 # list all running containers
@@ -186,21 +390,17 @@ docker container ls # OR, docker ps
 docker container ls -a # OR, docker ps -a
 ```
 
-- **Stop a running container**
+### Stop / Start
 
 ```sh
 # docker stop container_name/container_id
 docker stop myapp
-```
 
-- **Start a stopped container**
-
-```sh
 # docker start container_name/container_id
 docker start myapp
 ```
 
-- **Execute command in running container**
+### Execute command in running container
 
 > It is useful for debugging, troubleshooting, or when we need to run commands directly inside the container. Once the container is running in interactive mode, we can execute commands within the container just as if we were inside a regular terminal.
 
@@ -210,7 +410,7 @@ docker start myapp
 docker exec -it myapp sh # OR, docker exec -it myapp /bin/sh
 ```
 
-- **Run a container in interactive mode**
+### Run a container in interactive mode
 
 > It is useful for debugging, troubleshooting, or when we need to run commands directly inside the container. Once the container is running in interactive mode, we can execute commands within the container just as if we were inside a regular terminal. 
 
@@ -226,7 +426,7 @@ dcoker run -it myapp bash
 type `exit` or `Ctrl + D`: To exit the interactive mode and stoping the container. \
 `Ctrl + P` followed by `Ctrl + Q`: To exit the interactive mode without stopping the container.
 
-- **Remove a container**
+### Remove a container
 
 ```sh
 # remove a stopped container
@@ -237,7 +437,7 @@ docker container rm myapp # OR, docker rm myapp
 docker container rm -f myapp # docker rm -f myapp
 ```
 
-- **View container logs**
+### View container logs
 
 > It is useful for debugging, and troubleshooting.
 
@@ -245,7 +445,7 @@ docker container rm -f myapp # docker rm -f myapp
 docker logs myapp
 ```
 
-- **Pause/unpause a running container**
+### Pause/unpause a running container
 
 ```sh
 docker pause myapp
@@ -253,55 +453,101 @@ docker pause myapp
 docker unpause myapp
 ```
 
-Here `<container>` equals __container name__ or __container id__
-
-| command                                           | explain                                   | examples/notes                          |
-| ------------------------------------------------- | ----------------------------------------- | --------------------------------------- |
-| `docker run <image>`                              | Runs a container from an image            | combine: `docker pull` + `docker start` |
-| `docker run -d <image>`                           | Runs a container in detached mode         | docker starts in background             |
-| `docker run -p<HOST_PORT:CONTAINER_PORT> <image>` | Runs a container (binding port with host) | `docker run -p4000:3000`                |
-| `docker ls -a`                                    | Lists all containers                      | `docker ps -a`                          |
-| `docker ls -a &#124; grep <container_name>`       | Filters container by name                 |                                         |
-| `docker rm <container>`                           | Removes a container                       | `docker rm`                             |
-| `docker stop <container>`                         | Stops a container                         | `docker stop`                           |
-| `docker stop $(docker ps -aq)`                    | Stops all running containers              |                                         |
-| `docker exec <container>`                         | Executes a command inside the container   | `docker exec`                           |
-| `docker rm <container>`                           | removes a stop container                  |                                         |
-| `docker rm -f <container>`                        | removes a running container forcefully    |                                         |
-| `docker rm <container> <container>`               | removes multiple containers               |                                         |
-| `docker rm $(docker ps -aq)`                      | removes all containers                    |                                         |
-| `docker logs <container>`                         | gets logs                                 |                                         |
-| `docker top <container>`                          | list processes running in container       |                                         |
-| `docker container inspect <container>`                          |  Display detailed information on one or more containers       |    `docker container inspect postgres15`                                     |
-
-
-> In fish, **$** is used only for variables. Correct notation equivalent to bash **$(command)** is just **(command)** in fish.
+---
 
 ## Docker Volumes
 
-> Docker valumes are used for data persistence. Docker relies on virtual file system. When a container is restarted or removed, the data is lost. Therefore, creating volumes becomes essential to preserve data even across container lifecycle events.
+Docker containers use an **isolated filesystem**.
+By default, **any data written inside a container is lost** when the container is stopped, removed, or recreated.
 
-> Docker volumes mean that a pysical file system path is mounted into the virtual file system path in Docker. This allows for synchronization between the virtual file system and the host file system. When virtual file system is updated, the host file system gets automatically replicated, or vice varsa.
+To solve this problem, Docker provides **volumes**.
 
-- **Create a named volume**
+---
+
+### What Is a Docker Volume?
+
+A **Docker volume** is a way to **store data outside the container’s filesystem** so that the data **persists even after the container is deleted**.
+
+In simple terms:
+
+> A Docker volume connects a directory inside a container to a directory on the host machine (or to Docker-managed storage).
+
+---
+
+### Why Volumes Are Important
+
+Without volumes:
+
+* Container is deleted → data is lost
+
+With volumes:
+
+* Container is deleted → **data remains**
+* New container can reuse the same data
+
+---
+
+### How Docker Volumes Work
+
+* The container writes data to a directory
+* That directory is **mounted** to a location outside the container
+* Docker keeps this data independent from the container lifecycle
+
+```
+Container filesystem  --->  Volume (persistent storage)
+```
+
+---
+
+### Data Synchronization
+
+* When data changes **inside the container**, it is immediately reflected in the volume
+* When data changes **in the volume**, the container sees the updated data
+
+This works because both paths point to the **same storage location**.
+
+---
+
+### Simple Example
+
+```sh
+docker run -v my-data:/var/lib/mysql mysql
+```
+
+* `/var/lib/mysql` → path inside the container
+* `my-data` → Docker-managed persistent volume
+* Database data stays safe even if the container is removed
+
+---
+
+> **Containers are temporary. Volumes are permanent.**
+
+Use Docker volumes whenever your application needs to store:
+
+* Databases
+* User uploads
+* Logs
+* Configuration data
+
+### Create a named volume
 
 ```sh
 docker volume create volume_name
 ```
 
-- **List all volumes**
+### List all volumes
 
 ```sh
 docker volume ls
 ```
 
-- **Remove a volume**
+### Remove a volume
 
 ```sh
 docker volume rm volume_name
 ```
 
-- **Run a container with a volume**
+### Run a container with a volume
 
 ```sh
 # This is called host vaolumes
@@ -320,7 +566,7 @@ docker run -v /var/lib/mysql/data myapp
 docker run -v my-data:/var/lib/mysql/data myapp
 ```
 
-- **Copy files between a contain and a volume**
+### Copy files between a contain and a volume
 
 ```sh
 # copy from container to volume
@@ -332,37 +578,164 @@ docker cp /path/in/volume container_name:/path/in/container
 
 ## Docker Network
 
-- **Create a user-defined bridge network**
+By default, Docker containers are **isolated from each other** and from the outside world.
+They cannot communicate unless Docker explicitly allows it.
+
+To control **how containers talk to each other and to external systems**, Docker provides **networks**.
+
+---
+
+### What Is a Docker Network?
+
+A **Docker network** is a virtual network that connects containers together and controls:
+
+* Which containers can communicate
+* How they discover each other
+* How traffic flows in and out of containers
+
+In simple terms:
+
+> A Docker network acts like a **private LAN** for containers.
+
+---
+
+### Why Docker Networks Are Important
+
+Without Docker networks:
+
+* Containers cannot easily talk to each other
+* You must use IP addresses (which change)
+* Communication becomes fragile
+
+With Docker networks:
+
+* Containers can communicate using **container names**
+* Network isolation improves security
+* Multi-container applications become manageable
+
+---
+
+### How Docker Networks Work
+
+* Docker creates a **virtual network layer**
+* Each container gets:
+
+  * A virtual network interface
+  * An internal IP address
+* Docker provides built-in **DNS**, so containers can find each other by name
+
+```
+[ web ] ----\
+             ---> Docker Network ---> Internet
+[ db  ] ----/
+```
+
+---
+
+### Container-to-Container Communication
+
+If two containers are on the **same Docker network**:
+
+```sh
+docker network create app-network
+
+docker run --name db --network app-network postgres
+docker run --name api --network app-network my-api
+```
+
+Inside `api`, you can connect to the database using:
+
+```
+db:5432
+```
+
+No IP addresses needed.
+
+---
+
+### Container-to-Host / Internet Communication
+
+* Containers can access the internet by default
+* To access a container from the host or browser, **ports must be published**
+
+```sh
+docker run -p 8080:80 nginx
+```
+
+* Host port `8080` → Container port `80`
+
+---
+
+### Types of Docker Networks (Common Ones)
+
+| Network Type | Purpose                 | When to Use                     |
+| ------------ | ----------------------- | ------------------------------- |
+| bridge       | Default private network | Most local development          |
+| host         | Share host network      | High performance, low isolation |
+| none         | No networking           | Maximum isolation               |
+| overlay      | Multi-host networking   | Docker Swarm / Kubernetes       |
+
+---
+
+### Network Isolation
+
+* Containers on **different networks cannot communicate**
+* This improves security by limiting access
+
+Example:
+
+* `frontend` network → web app
+* `backend` network → database
+
+Only containers connected to both can act as bridges.
+
+---
+
+### Simple Mental Model
+
+> **Docker Network = Virtual switch + DNS for containers**
+
+---
+
+### Key Takeaway
+
+* Containers communicate through Docker networks
+* Names are more important than IPs
+* Networks provide isolation, discovery, and control
+
+---
+
+### Create a user-defined bridge network
 
 ```sh
 docker network create network_name
 ```
 
-- **List all networks**
+### List all networks
 
 ```sh
 docker network ls
 ```
 
-- **Connect a container to a network**
+### Connect a container to a network
 
 ```sh
 docker network connect network_name container_name
 ```
 
-- **Disconnect a container from a network**
+### Disconnect a container from a network
 
 ```sh
 docker network disconnect network_name container_name
 ```
 
-- **Run a container within a specific network**
+### Run a container within a specific network
 
 ```sh
 docker run --network network_name image_name # OR, docker run -net network_name image_name
 ```
 
-- **Inspect details of an image, container, volume, and network**
+### Inspect details of an image, container, volume, and network
 
 ```sh
 docker image inspect myapp:1.0 # docker image inspect image_name:tag
@@ -377,4 +750,419 @@ docker image inspect myapp | jq
 docker inspect myapp
 ```
 
-## Docker Compose
+---
+
+## Dockerfile
+
+A **Dockerfile** is a plain text file that contains **step-by-step instructions** telling Docker how to build an image.
+
+In simple terms:
+
+> A Dockerfile is a **recipe** for creating a Docker image.
+
+* Each instruction creates a **layer** in the image
+* Layers are cached to speed up rebuilds
+* The final image is immutable
+
+---
+
+### Basic Dockerfile Structure
+
+```Dockerfile
+# Base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Copy files
+COPY package.json .
+
+# Install dependencies
+RUN npm install
+
+# Copy application code
+COPY . .
+
+# Start the application
+CMD ["npm", "start"]
+```
+
+---
+
+### Dockerfile Instructions (One by One)
+
+#### FROM
+
+```Dockerfile
+FROM node:18
+```
+
+* Defines the **base image**
+* Must be the **first instruction** (except ARG)
+* Every image starts from another image
+
+Think of it as:
+
+> "Start building my image on top of this image"
+
+---
+
+#### ARG
+
+```Dockerfile
+ARG NODE_ENV=production
+```
+
+* Defines **build-time variables**
+* Available only during `docker build`
+* Not available at runtime
+
+```sh
+docker build --build-arg NODE_ENV=development .
+```
+
+---
+
+#### ENV
+
+```Dockerfile
+ENV NODE_ENV=production
+```
+
+* Defines **runtime environment variables**
+* Available inside the container
+* Persists in the final image
+
+Difference from ARG:
+
+* `ARG` → build time only
+* `ENV` → runtime
+
+---
+
+#### WORKDIR
+
+```Dockerfile
+WORKDIR /app
+```
+
+* Sets the working directory inside the image
+* Automatically creates the directory if it doesn’t exist
+* All following commands run from this directory
+
+Equivalent to:
+
+```sh
+cd /app
+```
+
+---
+
+#### COPY
+
+```Dockerfile
+COPY . .
+```
+
+* Copies files from **host → image**
+* Simple and predictable
+
+Best practice:
+
+* Prefer `COPY` over `ADD`
+
+---
+
+#### ADD (Use Carefully)
+
+```Dockerfile
+ADD archive.tar.gz /app
+```
+
+* Can extract tar files automatically
+* Can download files from URLs
+
+⚠️ Often causes confusion. Use only when needed.
+
+---
+
+#### RUN
+
+```Dockerfile
+RUN npm install
+```
+
+* Executes commands **at build time**
+* Creates a new image layer
+* Used to install dependencies or build artifacts
+
+Think of it as:
+
+> "Prepare the image"
+
+---
+
+#### EXPOSE
+
+```Dockerfile
+EXPOSE 3000
+```
+
+* Documents which port the container listens on
+* Does **not** publish the port
+
+Publishing still requires:
+
+```sh
+docker run -p 3000:3000 myapp
+```
+
+---
+
+#### USER
+
+```Dockerfile
+USER node
+```
+
+* Runs the container as a non-root user
+* Improves security
+
+---
+
+#### VOLUME
+
+```Dockerfile
+VOLUME /data
+```
+
+* Declares a mount point for persistent data
+* Actual volume is created at runtime
+
+---
+
+#### HEALTHCHECK
+
+```Dockerfile
+HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
+```
+
+* Tells Docker how to check container health
+* Useful for orchestration systems
+
+---
+
+#### SHELL
+
+```Dockerfile
+SHELL ["/bin/bash", "-c"]
+```
+
+* Changes the default shell for RUN commands
+
+---
+
+#### LABEL
+
+```Dockerfile
+LABEL maintainer="dev@example.com"
+```
+
+* Adds metadata to the image
+* Useful for documentation and automation
+
+---
+
+### 4. CMD vs ENTRYPOINT
+
+Both **CMD** and **ENTRYPOINT** define what runs when a container starts, but they serve different purposes.
+
+---
+
+### CMD
+
+* Provides **default arguments**
+* Can be easily overridden at runtime
+
+**Dockerfile example:**
+
+```Dockerfile
+FROM ubuntu
+CMD ["echo", "Hello World"]
+```
+
+**Run:**
+
+```sh
+docker run myimage
+# Output: Hello World
+
+# Override CMD
+docker run myimage echo "Hi"
+# Output: Hi
+```
+
+Think of CMD as:
+
+> "Default behavior"
+
+---
+
+### ENTRYPOINT
+
+* Defines the **main command**
+* Not overridden unless explicitly requested
+
+**Dockerfile example:**
+
+```Dockerfile
+FROM ubuntu
+ENTRYPOINT ["echo"]
+```
+
+**Run:**
+
+```sh
+docker run myimage Hello
+# Output: Hello
+```
+
+Think of ENTRYPOINT as:
+
+> "This container *is* this command"
+
+---
+
+### ENTRYPOINT + CMD (Best Practice)
+
+Use **ENTRYPOINT** for the executable and **CMD** for default arguments.
+
+**Dockerfile example:**
+
+```Dockerfile
+FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["Hello World"]
+```
+
+**Behavior:**
+
+```sh
+docker run myimage
+# Output: Hello World
+
+docker run myimage Hi
+# Output: Hi
+```
+
+* ENTRYPOINT → executable
+* CMD → default arguments
+
+---
+
+### Summary Table of CMD vs Entrypoint
+
+| Feature     | CMD          | ENTRYPOINT          |
+| ----------- | ------------ | ------------------- |
+| Purpose     | Default args | Main command        |
+| Overridable | Yes          | No (by default)     |
+| Common use  | Defaults     | Production behavior |
+
+---
+
+### Key Takeaways
+
+* Dockerfile defines **how an image is built**
+* Each instruction creates a layer
+* Use ENTRYPOINT for executables
+* Use CMD for defaults
+
+> **Good Dockerfiles are predictable, minimal, and explicit.**
+
+
+## CMD vs ENTRYPOINT
+
+Both **CMD** and **ENTRYPOINT** define what command runs when a container starts.
+
+---
+
+### CMD
+
+* Provides **default arguments**
+* Can be easily overridden at runtime
+
+**Dockerfile example:**
+
+```Dockerfile
+FROM ubuntu
+CMD ["echo", "Hello World"]
+```
+
+**Run:**
+
+```sh
+docker run myimage
+# Output: Hello World
+
+# Override CMD
+docker run myimage echo "Hi"
+# Output: Hi
+```
+
+---
+
+### ENTRYPOINT
+
+* Defines the **main command**
+* Not overridden unless explicitly requested
+
+**Dockerfile example:**
+
+```Dockerfile
+FROM ubuntu
+ENTRYPOINT ["echo"]
+```
+
+**Run:**
+
+```sh
+docker run myimage Hello
+# Output: Hello
+```
+
+---
+
+### ENTRYPOINT + CMD (Best Practice)
+
+Use **ENTRYPOINT** for the executable and **CMD** for default arguments.
+
+**Dockerfile example:**
+
+```Dockerfile
+FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["Hello World"]
+```
+
+**Behavior:**
+
+```sh
+docker run myimage
+# Output: Hello World
+
+docker run myimage Hi
+# Output: Hi
+```
+
+---
+
+### Summary Table
+
+| Feature     | CMD               | ENTRYPOINT       |
+| ----------- | ----------------- | ---------------- |
+| Purpose     | Default arguments | Main command     |
+| Overridable | Yes               | No (by default)  |
+| Common use  | Dev defaults      | Production entry |
+
+---

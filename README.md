@@ -1022,50 +1022,282 @@ Only containers connected to both can act as bridges.
 
 ---
 
-### Create a user-defined bridge network
-
-```sh
-docker network create network_name
-```
-
-### List all networks
+## List All Docker Networks
 
 ```sh
 docker network ls
 ```
 
-### Connect a container to a network
+### What it shows:
+
+* Network name
+* Network ID
+* Driver (bridge, host, none)
+* Scope
+
+📌 Example output:
+
+```
+bridge
+host
+none
+```
+
+---
+
+## Create a User-Defined Bridge Network
+
+```sh
+docker network create network_name
+```
+
+### Why user-defined bridge?
+
+* Automatic **DNS resolution**
+* Containers can talk using **container names**
+* Better isolation than default bridge
+
+---
+
+## Create a Bridge Network with Custom Subnet & Gateway
+
+```sh
+docker network create \
+  --driver bridge \
+  --subnet 182.18.0.0/24 \
+  --gateway 182.18.0.1 \
+  wp-mysql-network
+```
+
+### Explanation:
+
+* `--driver bridge` → bridge network
+* `--subnet` → custom IP range
+* `--gateway` → network gateway
+* `wp-mysql-network` → network name
+
+📌 Each container in this network gets an IP like:
+
+```
+182.18.0.x
+```
+
+---
+
+## Inspect a Network
+
+```sh
+docker network inspect bridge
+```
+
+OR
+
+```sh
+docker network inspect wp-mysql-network
+```
+
+### What you can see:
+
+* Subnet & gateway
+* Connected containers
+* IP addresses
+* Network driver
+
+📌 Very useful for debugging networking issues.
+
+---
+
+## Run a Container in a Specific Network
+
+```sh
+docker run --network network_name image_name
+```
+
+OR (short form):
+
+```sh
+docker run -net network_name image_name
+```
+
+### Example:
+
+```sh
+docker run --network wp-mysql-network alpine
+```
+
+---
+
+## Run a Container with **No Network Access**
+
+```sh
+docker run --name alpine-2 --network=none alpine
+```
+
+### What this means:
+
+* Container has **no network**
+* No internet
+* No container communication
+
+📌 Used for:
+
+* Security testing
+* Isolated workloads
+
+---
+
+## Connect an Existing Container to a Network
 
 ```sh
 docker network connect network_name container_name
 ```
 
-### Disconnect a container from a network
+### Example:
+
+```sh
+docker network connect wp-mysql-network alpine-2
+```
+
+---
+
+## Disconnect a Container from a Network
 
 ```sh
 docker network disconnect network_name container_name
 ```
 
-### Run a container within a specific network
+### Example:
 
 ```sh
-docker run --network network_name image_name # OR, docker run -net network_name image_name
+docker network disconnect wp-mysql-network alpine-2
 ```
 
-### Inspect details of an image, container, volume, and network
+---
+
+## Real Example: Web App + MySQL Using Custom Network
+
+### Step 1: Create Network
 
 ```sh
-docker image inspect myapp:1.0 # docker image inspect image_name:tag
-docker container inspect myapp # docker container inspect container_name
-docker volume inspect my-data # docker volume inspect volume_name
-docker network app-network # docker network inspect network_name
+docker network create \
+  --driver bridge \
+  --subnet 182.18.0.0/24 \
+  --gateway 182.18.0.1 \
+  wp-mysql-network
+```
 
-# to format and filter the JSON output
+---
+
+### Step 2: Run MySQL Container
+
+```sh
+docker run -d \
+  --name mysql-db \
+  -e MYSQL_ROOT_PASSWORD=db_pass123 \
+  --network=wp-mysql-network \
+  mysql:5.7
+```
+
+### Explanation:
+
+* MySQL runs inside `wp-mysql-network`
+* Container name `mysql-db` acts as **DNS hostname**
+
+---
+
+### Step 3: Run Web Application Container
+
+```sh
+docker run -d \
+  --name webapp \
+  --network=wp-mysql-network \
+  -e DB_Host=mysql-db \
+  -e DB_Password=db_pass123 \
+  -p 38080:8080 \
+  --link mysql-db:mysql-db \
+  kodekloud/simple-webapp-mysql
+```
+
+### Explanation:
+
+* `DB_Host=mysql-db` → resolves via Docker DNS
+* `--link` → legacy (not needed in user-defined networks)
+* `-p 38080:8080` → access app via browser
+
+🌐 Access app:
+
+```
+http://localhost:38080
+```
+
+---
+
+## Container Communication Diagram
+
+```
++---------------------------+
+| wp-mysql-network          |
+|  182.18.0.0/24            |
+|                           |
+|  +-----------+            |
+|  | webapp    |            |
+|  | DB_Host → |───DNS────┐ |
+|  +-----------+          | |
+|                           |
+|  +-----------+          | |
+|  | mysql-db  |◀─────────┘ |
+|  +-----------+            |
++---------------------------+
+```
+
+- Containers talk using **names**
+- No need for IP addresses
+
+---
+
+## Inspect Images, Containers, Volumes & Networks
+
+```sh
+docker image inspect myapp:1.0
+docker container inspect myapp
+docker volume inspect my-data
+docker network inspect app-network
+```
+
+### Format JSON Output (Readable)
+
+```sh
 docker image inspect myapp | jq
+```
 
-# we can also use "docker inspect" for all of them
+### Universal Inspect Command
+
+```sh
 docker inspect myapp
 ```
+
+👉 Works for:
+
+* image
+* container
+* volume
+* network
+
+---
+
+## Key Points to Remember 🧠
+
+* **User-defined bridge network = best practice**
+* Containers communicate using **container names**
+* **Docker DNS** works only in user-defined networks
+* `--link` is **deprecated**
+* `network=none` → fully isolated container
+
+---
+
+## One-Line Summary
+
+> Docker networking allows containers to communicate securely using user-defined bridge networks with built-in DNS and isolation.
 
 ---
 

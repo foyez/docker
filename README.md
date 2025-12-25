@@ -274,15 +274,155 @@ docker run nginx
 
 ## Docker Engine
 
-The **Docker Engine** is the core component of Docker. It allows you to run and manage containers. It is responsible for creating, running, and managing containers on your system.
+The **Docker Engine** is the core component of Docker that allows you to run and manage containers. It is responsible for creating, running, and managing containers on your system.
+
+Docker Engine runs containers using Linux namespaces for isolation and cgroups for resource control, while Docker CLI communicates with Docker Daemon through REST API.
+
+<details>
+<summary>View contents</summary>
+
+### Docker Engine = 3 Main Parts
+
+1. **Docker CLI (Client)**
+2. **Docker Daemon (Server)**
+3. **Docker REST API (Communication Layer)**
+
+## 1. Docker CLI (Client)
+
+The **Docker CLI** is the command-line tool we use to interact with Docker.
+
+Examples:
+
+```bash
+docker run ubuntu
+docker ps
+docker build .
+```
+
+### What Docker CLI does:
+
+* Takes user commands
+* Converts them into **REST API requests**
+* Sends them to the **Docker Daemon**
+
+**Important:**
+Docker CLI **does not run containers**.
+It only **talks** to the Docker Daemon.
+
+---
+
+## 2. Docker Daemon (dockerd)
+
+The **Docker Daemon** is the **brain** of Docker.
+
+### What Docker Daemon does:
+
+* Creates containers
+* Runs containers
+* Stops containers
+* Manages images, networks, volumes
+* Uses **Linux Kernel features**
+
+  * **Namespaces** → isolation
+  * **cgroups** → resource limits (CPU, memory)
+
+The daemon runs in the background as:
+
+```bash
+dockerd
+```
+
+By default, it listens on:
+
+```
+unix:///var/run/docker.sock
+```
+
+---
+
+## 3. Docker REST API
+
+The **Docker REST API** is how communication happens.
+
+### Flow:
+
+* Docker CLI → sends **HTTP request**
+* Docker Daemon → receives & processes it
+
+Example API action:
+
+```
+POST /containers/create
+```
+
+This means:
+
+* Docker CLI = API Client
+* Docker Daemon = API Server
+
+---
+
+## Docker Engine Architecture Diagram
+
+```
++-------------+
+| Docker CLI  |
+| (docker)    |
++------+------+
+       |
+       | REST API (HTTP)
+       |
++------+------+
+| Docker      |
+| Daemon      |
+| (dockerd)   |
++------+------+
+       |
+       | Linux Kernel
+       |
++------+--------------------+
+| Namespaces | cgroups      |
+| (isolate)  | (limit)      |
++---------------------------+
+```
+
+---
+
+## Connecting to Remote Docker Engine
+
+### Command:
+
+```bash
+docker -H=remote-docker-engine:2375
+```
+
+### What it means:
+
+* `-H` → Host
+* `2375` → Docker daemon TCP port
+* Docker CLI connects to a **remote Docker Daemon**
+
+📌 Instead of local socket:
+
+```
+/var/run/docker.sock
+```
+
+It uses:
+
+```
+tcp://remote-docker-engine:2375
+```
+
+⚠️ **Note:**
+Port **2375 is insecure** unless protected with TLS.
+
+---
 
 Two critical concepts within Docker that allow containers to function efficiently and securely are:
 
 1. **Namespaces**
 2. **Control Groups (cgroups)**
-
-<details>
-<summary>View contents</summary>
 
 ### **1. Docker Namespaces**
 
@@ -375,6 +515,46 @@ Here’s a simple diagram to show how cgroups work:
 
 ---
 
+### CPU Limit Example
+
+```bash
+docker run --cpu=.5 ubuntu
+```
+
+### Explanation:
+
+* Container can use **50% of one CPU core**
+* Enforced using **cgroups**
+* Prevents container from overusing CPU
+
+📌 Internally:
+
+```
+cgroups → CPU quota = 50%
+```
+
+---
+
+### Memory Limit Example
+
+```bash
+docker run --memory=100m ubuntu
+```
+
+### Explanation:
+
+* Container can use **maximum 100 MB RAM**
+* Controlled using **memory cgroups**
+* If limit exceeded → container may be stopped
+
+📌 Internally:
+
+```
+cgroups → memory limit = 100MB
+```
+
+---
+
 ### **How Namespaces and Cgroups Work Together**
 
 * **Namespaces** provide isolation for the container, making sure that it operates as if it has its own system.
@@ -389,6 +569,21 @@ In this way, Docker achieves efficient resource utilization while maintaining th
 Think of the **namespace** as a room inside a house. Each room has its own walls, door, and windows (isolated environment). You can't see or interact with things outside your room unless you specifically open the door.
 
 Now, imagine that **cgroups** are like the amount of space and energy allowed in the room. Cgroups make sure that no room gets too crowded or uses too much energy (CPU, memory, etc.)—there’s a limit to how much each room can use.
+
+---
+
+## How Docker Engine Executes `docker run`
+
+### Step-by-Step Flow:
+
+1. User runs `docker run`
+2. Docker CLI sends REST API request
+3. Docker Daemon receives request
+4. Daemon:
+
+   * Creates **namespaces** (PID, NET, MNT, etc.)
+   * Applies **cgroups** (CPU, memory)
+5. Container starts running
 
 ---
 

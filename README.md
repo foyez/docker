@@ -201,6 +201,9 @@ Running:
 
 ## Why Containers Are Useful
 
+<details>
+<summary>View contents</summary>
+
 ### Scenario 1: “Works on My Machine”
 
 Containers package the application **with its exact dependencies**, ensuring consistent behavior across development, testing, and production environments.
@@ -238,6 +241,8 @@ With container orchestration (e.g., Kubernetes):
 * Horizontal scaling becomes simple
 
 ---
+
+</details>
 
 ## What Is Docker?
 
@@ -600,6 +605,9 @@ docker version
 
 ## Docker Images
 
+<details>
+<summary>View contents</summary>
+
 ### Build an Image
 
 ```sh
@@ -669,7 +677,12 @@ docker image prune
 
 ---
 
+</details>
+
 ## Docker Containers
+
+<details>
+<summary>View contents</summary>
 
 Container Information
 
@@ -772,6 +785,8 @@ docker unpause myapp
 
 ---
 
+</details>
+
 ## Docker Volumes
 
 Docker containers use an **isolated filesystem**.
@@ -779,7 +794,8 @@ By default, **any data written inside a container is lost** when the container i
 
 To solve this problem, Docker provides **volumes**.
 
----
+<details>
+<summary>View contents</summary>
 
 ### What Is a Docker Volume?
 
@@ -893,6 +909,10 @@ docker cp container_name:/path/to/source/file_or_directory /path/in/volume
 docker cp /path/in/volume container_name:/path/in/container
 ```
 
+---
+
+</details>
+
 ## Docker Network
 
 By default, Docker containers are **isolated from each other** and from the outside world.
@@ -900,7 +920,8 @@ They cannot communicate unless Docker explicitly allows it.
 
 To control **how containers talk to each other and to external systems**, Docker provides **networks**.
 
----
+<details>
+<summary>View contents</summary>
 
 ### What Is a Docker Network?
 
@@ -1301,9 +1322,176 @@ docker inspect myapp
 
 ---
 
+</details>
+
+## Docker Registry
+
+A **Docker registry** is a place where Docker images are stored, shared, and retrieved. It allows you to upload your Docker images, manage them, and pull them when needed. 
+
+<details>
+<summary>View contents</summary>
+
+There are two main types of Docker registries:
+
+1. **Public Docker Registries** (e.g., DockerHub)
+2. **Private Docker Registries** (self-hosted or third-party services)
+
+The default registry used by Docker is **DockerHub**, a cloud-based service hosted by Docker Inc. However, you can also set up your own registry or use third-party registry services.
+
+---
+
+### DockerHub: The Default Public Registry
+
+* **DockerHub** is a cloud-based, public Docker registry where you can store and share your Docker images. It is the default registry for the Docker engine.
+* **Features of DockerHub**:
+
+  * **Public Repositories**: Free for anyone to push and pull images.
+  * **Private Repositories**: Available with a paid plan, allowing you to keep your images private.
+  * **Automated Builds**: DockerHub can automatically build images from GitHub or Bitbucket repositories.
+  * **Integration with Source Control**: It works well with GitHub, Bitbucket, and other version control systems.
+
+---
+
+### Self-Hosted Docker Registry
+
+Sometimes, you may want to set up your own registry, either for security or privacy reasons, or to have full control over the images. This is called a **private registry**.
+
+To set up a **self-hosted Docker registry**, you can use the following Docker command to run the registry container:
+
+```bash
+docker run -d -p 5000:5000 --restart=always --name my-registry registry:2
+```
+
+This will start a registry on your local machine at port 5000. Once your registry is running, you can push and pull images to/from it just like any other registry.
+
+---
+
+### Pushing and Pulling Images from a Docker Registry
+
+To **push** an image to your self-hosted registry:
+
+1. First, pull an image from DockerHub or another registry:
+
+   ```bash
+   docker pull nginx:latest
+   ```
+2. **Tag** the image with your registry’s address (in this case, it's `localhost:5000`):
+
+   ```bash
+   docker image tag nginx:latest localhost:5000/nginx:latest
+   ```
+3. **Push** the tagged image to your private registry:
+
+   ```bash
+   docker push localhost:5000/nginx:latest
+   ```
+
+Repeat the same steps for another image (e.g., httpd):
+
+1. Pull the image:
+
+   ```bash
+   docker pull httpd:latest
+   ```
+2. Tag the image:
+
+   ```bash
+   docker image tag httpd:latest localhost:5000/httpd:latest
+   ```
+3. Push it to your registry:
+
+   ```bash
+   docker push localhost:5000/httpd:latest
+   ```
+
+---
+
+### Checking the Pushed Images
+
+To check the images stored in your local registry, you can use the following command:
+
+```bash
+curl -X GET localhost:5000/v2/_catalog
+```
+
+This will list all the images pushed to the registry.
+
+---
+
+### Pulling Images from Your Private Registry
+
+Once the images are pushed to your private registry, you can **pull** them by specifying the registry’s address:
+
+```bash
+docker pull localhost:5000/nginx
+docker pull localhost:5000/httpd
+```
+
+You will be able to retrieve the images from your local registry, just like pulling from DockerHub.
+
+---
+
+### Types of Docker Registries
+
+1. **Public Docker Registry**:
+
+   * **DockerHub** is the most popular public registry.
+   * You can share your images with the community or use images shared by others.
+   * **Use case**: Open-source projects, community sharing.
+
+2. **Private Docker Registry**:
+
+   * Self-hosted on your own infrastructure or through a service like Amazon ECR, Google Container Registry, or others.
+   * Images are private, and access is controlled by authentication.
+   * **Use case**: Private applications, proprietary code, corporate environments.
+
+3. **Third-Party Docker Registries**:
+
+   * Companies like AWS (Elastic Container Registry), Google Cloud, and Azure provide managed registry services.
+   * These services offer enterprise features like security controls, scalability, and high availability.
+
+---
+
+### Docker Registry Commands
+
+* **Login to Docker Registry**:
+  If you're accessing a private registry, use:
+
+  ```bash
+  docker login [server]
+  ```
+
+* **Push an Image to a Registry**:
+  Tag the image and push it:
+
+  ```bash
+  docker push [server-address/image-name]
+  ```
+
+* **Pull an Image from a Registry**:
+  Pull an image using:
+
+  ```bash
+  docker pull [server-address/image-name]
+  ```
+
+* **Listing Images in Your Registry**:
+  You can list the available images in your registry using:
+
+  ```bash
+  curl -X GET [server-address]/v2/_catalog
+  ```
+
+---
+
+</details>
+
 ## Dockerfile
 
 A **Dockerfile** is a plain text file that contains **step-by-step instructions** telling Docker how to build an image.
+
+<details>
+<summary>View contents</summary>
 
 In simple terms:
 
@@ -1629,12 +1817,14 @@ docker run myimage Hi
 
 > **Good Dockerfiles are predictable, minimal, and explicit.**
 
+</details>
 
 ## CMD vs ENTRYPOINT
 
 Both **CMD** and **ENTRYPOINT** define what command runs when a container starts.
 
----
+<details>
+<summary>View contents</summary>
 
 ### CMD
 
@@ -1715,3 +1905,5 @@ docker run myimage Hi
 | Common use  | Dev defaults      | Production entry |
 
 ---
+
+</details>

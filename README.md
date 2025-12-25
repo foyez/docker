@@ -272,6 +272,128 @@ docker run nginx
 
 ---
 
+## Docker Engine
+
+The **Docker Engine** is the core component of Docker. It allows you to run and manage containers. It is responsible for creating, running, and managing containers on your system.
+
+Two critical concepts within Docker that allow containers to function efficiently and securely are:
+
+1. **Namespaces**
+2. **Control Groups (cgroups)**
+
+<details>
+<summary>View contents</summary>
+
+### **1. Docker Namespaces**
+
+A **namespace** in Docker is a feature of the Linux kernel that isolates different processes, networks, and other system resources so that they do not interfere with each other. When you run a Docker container, it is given its own namespaces that isolate it from other containers and the host system.
+
+Docker uses several types of namespaces to isolate containers:
+
+* **PID Namespace**: Isolates process IDs, meaning each container thinks it has its own set of processes (e.g., process ID 1 in the container).
+
+* **NET Namespace**: Isolates network interfaces, meaning each container gets its own virtual network stack, including IP addresses, ports, and routing tables.
+
+* **MNT Namespace**: Isolates mount points (filesystems), so each container has its own file system structure, independent of the host system or other containers.
+
+* **UTS Namespace**: Isolates hostname and domain name settings, so each container has its own hostname and can set up domain names.
+
+* **IPC Namespace**: Isolates inter-process communication (IPC) resources, such as message queues, semaphores, and shared memory.
+
+* **USER Namespace**: Isolates user and group IDs, so a process inside a container might have a different user ID (UID) compared to the same process outside the container.
+
+---
+
+### **Namespace Diagram**
+
+Let me draw a simple diagram to show how namespaces work:
+
+```
++--------------------------+
+|    Host System           | 
+|                          | 
+|  +--------------------+  |
+|  |  Container 1       |  |
+|  |  - PID Namespace   |  |
+|  |  - NET Namespace   |  |
+|  |  - MNT Namespace   |  |
+|  |  - IPC Namespace   |  |
+|  |  - USER Namespace  |  |
+|  +--------------------+  |
+|                          |
+|  +--------------------+  |
+|  |  Container 2       |  |
+|  |  - PID Namespace   |  |
+|  |  - NET Namespace   |  |
+|  |  - MNT Namespace   |  |
+|  |  - IPC Namespace   |  |
+|  |  - USER Namespace  |  |
+|  +--------------------+  |
++--------------------------+
+```
+
+* Each container has its own isolated namespaces (PID, NET, etc.).
+* The containers are independent, even though they run on the same physical host.
+
+---
+
+### **2. Control Groups (cgroups)**
+
+**Cgroups** (short for "Control Groups") are another feature of the Linux kernel that allow Docker to allocate and limit system resources (CPU, memory, disk I/O, etc.) to containers.
+
+With cgroups, Docker can:
+
+* Limit the amount of CPU and memory a container can use.
+* Prevent containers from using more resources than they are allowed.
+* Monitor the usage of resources by containers.
+* Set priority levels to control how containers share resources.
+
+For example, Docker can use cgroups to make sure that Container 1 does not use more than 2GB of RAM, even if it tries.
+
+---
+
+### **Cgroups Diagram**
+
+Here’s a simple diagram to show how cgroups work:
+
+```
++----------------------------+
+|         Host System         |
+|   +----------------------+  |
+|   |  Cgroup (CPU, Memory) |  |
+|   |  for Container 1      |  |
+|   +----------------------+  |
+|   +----------------------+  |
+|   |  Cgroup (CPU, Memory) |  |
+|   |  for Container 2      |  |
+|   +----------------------+  |
++----------------------------+
+```
+
+* The host system uses cgroups to allocate resources.
+* Each container gets its own cgroup to limit and monitor CPU and memory usage.
+
+---
+
+### **How Namespaces and Cgroups Work Together**
+
+* **Namespaces** provide isolation for the container, making sure that it operates as if it has its own system.
+* **Cgroups** manage and limit the resources available to each container, ensuring one container doesn’t starve others or take too many resources.
+
+In this way, Docker achieves efficient resource utilization while maintaining the isolation and security of containers.
+
+---
+
+### **Real-World Analogy**
+
+Think of the **namespace** as a room inside a house. Each room has its own walls, door, and windows (isolated environment). You can't see or interact with things outside your room unless you specifically open the door.
+
+Now, imagine that **cgroups** are like the amount of space and energy allowed in the room. Cgroups make sure that no room gets too crowded or uses too much energy (CPU, memory, etc.)—there’s a limit to how much each room can use.
+
+---
+
+</details>
+
 ## Basic Docker Commands
 
 ```sh

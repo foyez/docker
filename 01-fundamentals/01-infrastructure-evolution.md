@@ -254,8 +254,8 @@ Can run 50+ containers on single server
 │ │      Hypervisor       │  │ │    Container Runtime      │ │
 │ │      (Type 1/2)       │  │ │     (Docker Engine)       │ │
 │ ├───────────────────────┤  │ ├───────────────────────────┤ │
-│ │      Host OS (*)      │  │ │        Host OS            │ │
-│ │       (Type 2)        │  │ │        (Shared)           │ │
+│ │      Host OS (*)      │  │ │          Host OS          │ │
+│ │       (Type 2)        │  │ │       (Shared Kernel)     │ │
 │ ├───────────────────────┤  │ ├───────────────────────────┤ │
 │ │       Hardware        │  │ │        Hardware           │ │
 │ └───────────────────────┘  │ └───────────────────────────┘ │

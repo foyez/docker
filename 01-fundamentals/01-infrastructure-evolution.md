@@ -164,13 +164,13 @@ A **container** is a lightweight, isolated environment that packages an applicat
 ```
 ┌─────────────────────────────────────────────┐
 │           Physical Server                   │
-│  ┌────────┐ ┌────────┐ ┌────────┐           │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐        │
 │  │Container│ │Container│ │Container│        │
-│  │   1    │ │   2    │ │   3    │           │
-│  │        │ │        │ │        │           │
-│  │ App A  │ │ App B  │ │ App C  │           │
-│  │ Libs   │ │ Libs   │ │ Libs   │           │
-│  └────────┘ └────────┘ └────────┘           │
+│  │   1     │ │   2     │ │   3     │        │
+│  │         │ │         │ │         │        │
+│  │ App A   │ │ App B   │ │ App C   │        │
+│  │ Libs    │ │ Libs    │ │ Libs    │        │
+│  └─────────┘ └─────────┘ └─────────┘        │
 │                                             │
 │    Container Runtime (Docker Engine)        │
 │  ─────────────────────────────────────────  │
@@ -240,27 +240,28 @@ Can run 50+ containers on single server
 ## Virtual Machines vs Containers
 
 ```
-┌──────────────────────────────┬──────────────────────────────┐
-│      VIRTUAL MACHINES        │          CONTAINERS          │
-│                              │                              │
-│ ┌──────────────┐             │ ┌──────────────┐             │
-│ │   VM App     │             │ │  Container   │             │
-│ │   VM App     │             │ │  Container   │             │
-│ │   VM App     │             │ │  Container   │             │
-│ ├──────────────┤             │ ├──────────────┤             │
-│ │ Guest OS     │             │ │   App + Libs │             │
-│ ├──────────────┤             │ ├──────────────┤             │
-│ │ Hypervisor   │             │ │ Container    │             │
-│ │ (Type 1/2)   │             │ │ Runtime (*)  │             │
-│ ├──────────────┤             │ ├──────────────┤             │
-│ │ Host OS (*)  │             │ │ Host OS      │             │
-│ │ (Type 2)     │             │ │ (Shared)     │             │
-│ ├──────────────┤             │ ├──────────────┤             │
-│ │ Hardware     │             │ │ Hardware     │             │
-│ └──────────────┘             │ └──────────────┘             │
-│                              │ * Docker Enine is a          │
-│ * Host OS only in Type 2     │  a continer runtime          │
-└──────────────────────────────┴──────────────────────────────┘
+┌────────────────────────────┬───────────────────────────────┐
+│      VIRTUAL MACHINES      │          CONTAINERS           │
+│ ┌───────────┬───────────┐  │                               │
+│ │   VM 1    │   VM 2    │  │                               │
+| │ ───────── │ ───────── │  │ ┌─────────────┬─────────────┐ │
+│ │   Apps    │   Apps    │  │ │ Container 1 │ Container 2 │ │
+│ │ ───────── │ ───────── │  │ │ ─────────── │ ─────────── │ │
+│ │ Bins/Libs │ Bins/Libs │  │ │    Apps     │    Apps     │ │
+│ │ ───────── | ───────── │  │ │ ─────────── │ ─────────── │ │
+│ │ Guest OS  │ Guest OS  │  │ │  Bins/Libs  │  Bins/Libs  │ │
+│ ├───────────┴───────────┤  │ ├─────────────┴─────────────┤ │
+│ │      Hypervisor       │  │ │    Container Runtime      │ │
+│ │      (Type 1/2)       │  │ │     (Docker Engine)       │ │
+│ ├───────────────────────┤  │ ├───────────────────────────┤ │
+│ │      Host OS (*)      │  │ │        Host OS            │ │
+│ │       (Type 2)        │  │ │        (Shared)           │ │
+│ ├───────────────────────┤  │ ├───────────────────────────┤ │
+│ │       Hardware        │  │ │        Hardware           │ │
+│ └───────────────────────┘  │ └───────────────────────────┘ │
+│                            │                               │
+│ * Host OS only in Type 2   │                               │
+└────────────────────────────┴───────────────────────────────┘
 ```
 
 ---

@@ -1,6 +1,6 @@
 # 9.2 Kubernetes Overview
 
-Understanding what Kubernetes provides that Docker Compose cannot.
+Understanding Kubernetes architecture, core concepts, and essential components for container orchestration.
 
 ---
 
@@ -25,9 +25,9 @@ Understanding what Kubernetes provides that Docker Compose cannot.
 ┌─────────────────────────────────┐
 │      Single Server              │
 │                                 │
-│  ┌──────┐ ┌──────┐ ┌──────┐   │
-│  │ Web  │ │ API  │ │  DB  │   │
-│  └──────┘ └──────┘ └──────┘   │
+│  ┌──────┐ ┌──────┐ ┌──────┐     │
+│  │ Web  │ │ API  │ │  DB  │     │
+│  └──────┘ └──────┘ └──────┘     │
 │                                 │
 │  If this server fails =         │
 │  ENTIRE APPLICATION FAILS       │
@@ -1128,4 +1128,4 @@ After (Kubernetes):
 
 ---
 
-[← Previous: 9.1 Orchestration Introduction](01-orchestration-intro.md) | [Next: 10.1 Best Practices →](../10-best-practices/01-dockerfile-practices.md)
+[← Previous: 9.1 Orchestration Introduction](01-orchestration-intro.md) | [Next: 9.3 Kubernetes Architecture →](../09-orchestration/03-kubernetes-architecture.md)

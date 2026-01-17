@@ -1,4 +1,4 @@
-# 9.2 Kubernetes Overview
+# 9.2 Kubernetes Architecture
 
 Understanding Kubernetes architecture, core concepts, and essential components for container orchestration.
 
@@ -2434,4 +2434,4 @@ spec:
 
 ---
 
-[← Previous: 9.1 From Compose to Orchestration](01-compose-to-orchestration.md)
+[← Previous: 9.2 Kubernetes Overview](02-kubernetes-overview.md) | [Next: 10.1 Best Practices →](../10-best-practices/01-dockerfile-practices.md)

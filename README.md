@@ -108,6 +108,7 @@ A comprehensive, interview-ready guide to Docker covering fundamentals through a
   - What is Kubernetes?
   - Key Concepts
   - When to Use K8s
+- [9.2 Kubernetes Architecture](09-orchestration/03-kubernetes-architecture.md)
 
 ### 10. Best Practices & Production
 - [10.1 Dockerfile Best Practices](10-best-practices/01-dockerfile-practices.md)

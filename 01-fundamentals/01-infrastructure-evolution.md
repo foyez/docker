@@ -239,7 +239,61 @@ Can run 50+ containers on single server
 
 ## Virtual Machines vs Containers
 
+```
+┌──────────────────────────────┬──────────────────────────────┐
+│      VIRTUAL MACHINES        │          CONTAINERS          │
+│                              │                              │
+│ ┌──────────────┐             │ ┌──────────────┐             │
+│ │   VM App     │             │ │  Container   │             │
+│ │   VM App     │             │ │  Container   │             │
+│ │   VM App     │             │ │  Container   │             │
+│ ├──────────────┤             │ ├──────────────┤             │
+│ │ Guest OS     │             │ │   App + Libs │             │
+│ ├──────────────┤             │ ├──────────────┤             │
+│ │ Hypervisor   │             │ │ Container    │             │
+│ │ (Type 1/2)   │             │ │ Runtime (*)  │             │
+│ ├──────────────┤             │ ├──────────────┤             │
+│ │ Host OS (*)  │             │ │ Host OS      │             │
+│ │ (Type 2)     │             │ │ (Shared)     │             │
+│ ├──────────────┤             │ ├──────────────┤             │
+│ │ Hardware     │             │ │ Hardware     │             │
+│ └──────────────┘             │ └──────────────┘             │
+│                              │ * Docker Enine is a          │
+│ * Host OS only in Type 2     │  a continer runtime          │
+└──────────────────────────────┴──────────────────────────────┘
+```
+
+---
+
+**Type 1 vs Type 2 Hypervisor:**
+
+```
+Type 1 (Bare Metal)            Type 2 (Hosted)
+──────────────────            ──────────────────
+┌──────────────┐              ┌──────────────┐
+│   VM Apps    │              │   VM Apps    │
+├──────────────┤              ├──────────────┤
+│  Guest OS    │              │  Guest OS    │
+├──────────────┤              ├──────────────┤
+│ Hypervisor   │              │ Hypervisor   │
+├──────────────┤              ├──────────────┤
+│ Hardware     │              │ Host OS      │
+└──────────────┘              ├──────────────┤
+                              │ Hardware     │
+                              └──────────────┘
+```
+
+---
+
+* **VMs** virtualize **hardware** → each VM has its own OS
+* **Containers** virtualize the **OS** → share the host kernel
+* **Type 1 hypervisor** runs on hardware
+* **Type 2 hypervisor** runs on a host OS
+
 ### Detailed Comparison
+
+![alt text](../container-vm.webp)
+source: [k21academy](https://k21academy.com/wp-content/uploads/2020/11/Docker-and-Vm-blog-image_result-1.webp)
 
 | Aspect | Virtual Machines | Containers |
 |--------|------------------|------------|

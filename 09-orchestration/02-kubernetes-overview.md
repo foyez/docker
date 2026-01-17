@@ -1,6 +1,6 @@
 # 9.2 Kubernetes Overview
 
-Understanding Kubernetes architecture, core concepts, and essential components for container orchestration.
+Understanding what Kubernetes provides that Docker Compose cannot.
 
 ---
 
